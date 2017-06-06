@@ -85,68 +85,65 @@ Key                              | Description                            | Usag
       _draw() {
 
         if (this.table) {
-          if (this.data) {
-            this.table.clear();
-            this.table.rows.add(this.data);
-            this.table.draw();
-          }
-        } else {
+          this.table.destroy();
+          jQuery(this.$.dataTable).empty();
+          this.table = false;
+        }
 
-          let tableConfig = {
-            columns: this.columns,
-            dom: 'Lfrtip',
-            oLanguage: {
-              sSearch: "Find in Results:"
-            },
-            drawCallback: (settings) => {
-              setTimeout(() => {
-                $(this.$.dataTableWrapper).find('*').addClass('id-datatable');
-                $(this.$.dataTableWrapper).addClass('id-datatable');
+        let tableConfig = {
+          columns: this.columns,
+          dom: 'Lfrtip',
+          oLanguage: {
+            sSearch: "Find in Results:"
+          },
+          drawCallback: (settings) => {
+            setTimeout(() => {
+              $(this.$.dataTableWrapper).find('*').addClass('id-datatable');
+              $(this.$.dataTableWrapper).addClass('id-datatable');
 
-                $(this.$.dataTable).find('tbody tr').each((index, row) => {
-                  $(row).find('td').each((index, column) => {
-                    let $td = $(column);
-                    $td.attr('data-content', $td.closest('table').find('th').eq($td.index()).text());
-                  });
+              $(this.$.dataTable).find('tbody tr').each((index, row) => {
+                $(row).find('td').each((index, column) => {
+                  let $td = $(column);
+                  $td.attr('data-content', $td.closest('table').find('th').eq($td.index()).text());
                 });
               });
+            });
 
-            }
-          };
-
-          if (this.data) {
-            tableConfig.data = this.data;
           }
+        };
 
-          if (this.url) {
-            tableConfig.ajax = {
-              url: this.url,
-              dataSrc: ''
-            };
-          }
-
-          if (this.buttons) {
-
-            tableConfig.buttons = [{
-              extend: 'csv',
-              text: 'Export to CSV',
-              filename: (this.filename) ? this.filename : '*',
-              exportOptions: {
-                columns: ':visible'
-              }
-            }];
-            tableConfig.dom = 'BLfrtip';
-          }
-
-          if (this.basic) {
-            tableConfig.bSort = false;
-            tableConfig.paging = false;
-            tableConfig.dom = 'rt';
-          }
-
-          this.table = jQuery(this.$.dataTable).DataTable(tableConfig);
-
+        if (this.data) {
+          tableConfig.data = this.data;
         }
+
+        if (this.url) {
+          tableConfig.ajax = {
+            url: this.url,
+            dataSrc: ''
+          };
+        }
+
+        if (this.buttons) {
+
+          tableConfig.buttons = [{
+            extend: 'csv',
+            text: 'Export to CSV',
+            filename: (this.filename) ? this.filename : '*',
+            exportOptions: {
+              columns: ':visible'
+            }
+          }];
+          tableConfig.dom = 'BLfrtip';
+        }
+
+        if (this.basic) {
+          tableConfig.bSort = false;
+          tableConfig.paging = false;
+          tableConfig.dom = 'rt';
+        }
+
+        this.table = jQuery(this.$.dataTable).DataTable(tableConfig);
+
 
         this.dispatchEvent(new CustomEvent('id-datatable-draw', {data: this.data}));
       }
