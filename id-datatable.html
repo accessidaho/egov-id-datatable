@@ -45,9 +45,9 @@ Key                              | Description                            | Usag
           **/
           columns: Array,
           /**
-           * Ajax URL.
+           * Ajax options.
           **/
-          url: String,
+          ajax: String,
           /**
            * Which buttons to include. [Copy, CSV, PDF]
           **/
@@ -60,6 +60,27 @@ Key                              | Description                            | Usag
            * Disable advanced table features.
           **/
           basic: Boolean,
+          /**
+           * nable or disable the display of a 'processing' indicator when the table is being processed.
+          **/
+          processing: {
+            type: Boolean,
+            value: true
+          },
+          /**
+           * By default DataTables operates in client-side processing mode, but can be switched to server-side processing mode using this option.
+           */
+          serverSide: {
+            type: Boolean,
+            value: false
+          },
+          /**
+           * DataTables can split the rows in tables into individual pages, which is an efficient method of showing a large number of records in a small space.
+           */
+          paging: {
+            type: Boolean,
+            value: true
+          }
         };
       }
 
@@ -116,11 +137,12 @@ Key                              | Description                            | Usag
           tableConfig.data = this.data;
         }
 
-        if (this.url) {
-          tableConfig.ajax = {
-            url: this.url,
-            dataSrc: ''
-          };
+        tableConfig.processing = this.processing;
+        tableConfig.serverSide = this.serverSide;
+        tableConfig.paging = this.paging;
+
+        if (this.ajax) {
+          tableConfig.ajax = this.ajax;
         }
 
         if (this.buttons) {
