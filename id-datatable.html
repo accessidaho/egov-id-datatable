@@ -47,7 +47,7 @@ Key                              | Description                            | Usag
           /**
            * Ajax options.
           **/
-          ajax: String,
+          ajax: Object,
           /**
            * Which buttons to include. [Copy, CSV, PDF]
           **/
@@ -90,20 +90,20 @@ Key                              | Description                            | Usag
       **/
       ready() {
         super.ready();
-        this._draw();
+        this.draw();
       }
 
       static get observers() {
-        return [ '_draw(data)', '_draw(columns)' ]
+        return [ 'draw(data)' ]
       }
 
       /**
        * This function is called when the item is attached
-       * to the dom or an attribute is changed.
+       * to the dom or data is changed.
        *
        * @return {null}
       **/
-      _draw() {
+      draw() {
 
         if (this.table) {
           this.table.destroy();
